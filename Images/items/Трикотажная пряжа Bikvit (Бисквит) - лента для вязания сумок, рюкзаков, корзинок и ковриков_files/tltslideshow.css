@@ -1,0 +1,44 @@
+/* TLT Slideshow */
+
+/* Main slide class */
+.tltslide {
+}	
+
+/* Class for slide's text box */
+.tltslide-text {
+	background-color: #000;
+	opacity: 0.6;
+	/* Edit those settings if you want to move the text box within the slide */
+	bottom: 0; 
+	left: 0;
+	width: 100%;
+	/* Do not edit those settings until you do know what you are doing */
+	position: absolute;
+	padding: 10px 10px;	
+}
+
+/* Style for textbox header */
+.tltslide-text h1 {
+	color: #CCCCCC;
+	font-size: 33px;
+	font-weight: bold;
+	padding: 0;
+	margin: 0 0 5px;
+}
+
+.tltslide-text b {
+	color: #CCCCCC;
+	font-size: 33px;
+	font-weight: bold;
+}
+
+/* Style for textbox body */		
+.tltslide-text span {
+	color: #fff;
+	font-size: 20px;
+	opacity: 0.7;
+}
+
+.tltslide-text:hover {
+	opacity: 0.8;
+}
