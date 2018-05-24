@@ -314,7 +314,7 @@ namespace Nop.Services.Catalog
         public virtual string FormatShippingPrice(decimal price, bool showCurrency, 
             Currency targetCurrency, Language language, bool priceIncludesTax, bool showTax)
         {
-            return FormatPrice(price, showCurrency, targetCurrency, language, priceIncludesTax, showTax);
+            return price < 0 ? "Уточняйте у менеджера" : FormatPrice(price, showCurrency, targetCurrency, language, priceIncludesTax, showTax);
         }
         
         /// <summary>
