@@ -857,7 +857,7 @@ namespace Nop.Services.Orders
             adjustedRate = adjustedRate - discountAmount;
 
             if (adjustedRate < decimal.Zero)
-                adjustedRate = decimal.Zero;
+                //adjustedRate = decimal.Zero;
 
             if (_shoppingCartSettings.RoundPricesDuringCalculation)
                 adjustedRate = RoundingHelper.RoundPrice(adjustedRate);
@@ -978,7 +978,7 @@ namespace Nop.Services.Orders
             if (shippingTotal.HasValue)
             {
                 if (shippingTotal.Value < decimal.Zero)
-                    shippingTotal = decimal.Zero;
+                    //shippingTotal = decimal.Zero;
 
                 //round
                 if (_shoppingCartSettings.RoundPricesDuringCalculation)

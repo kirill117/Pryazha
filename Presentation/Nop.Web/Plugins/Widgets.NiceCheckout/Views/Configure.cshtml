@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.Widgets.NiceCheckout.Models.ConfigurationModel
+@using Nop.Web.Framework;
+@Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>
+                </p>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.Enabled_OverrideForStore, model => model.Enabled, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.Enabled)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Enabled)
+                        @Html.ValidationMessageFor(model => model.Enabled)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.CommentsEnabled_OverrideForStore, model => model.CommentsEnabled, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.CommentsEnabled)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.CommentsEnabled)
+                        @Html.ValidationMessageFor(model => model.CommentsEnabled)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.CheckoutConfirmButtonFillped_OverrideForStore, model => model.CheckoutConfirmButtonFillped, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.CheckoutConfirmButtonFillped)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.CheckoutConfirmButtonFillped)
+                        @Html.ValidationMessageFor(model => model.CheckoutConfirmButtonFillped)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-9">
+                        <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

@@ -6248,7 +6248,7 @@ pre {
 	margin: 0 auto 30px;
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
-	padding: 25px 0;
+	padding: 5px 0;
 	text-align: center;
 }
 .menu-toggle,
@@ -6610,10 +6610,16 @@ pre {
 	overflow: hidden;
 }
 .shopping-cart-page .checkout-attributes {
-	float: left;
-	max-width: 565px;
+	/*float: left;
+	max-width: 565px;*/
 	margin: -30px 0 15px;
 }
+
+.shopping-cart-page .checkout-attributes textarea{
+    width:100%;
+}
+
+
 .shopping-cart-page .checkout-attributes li {
 	margin: 5px 10px 5px 0;
 }

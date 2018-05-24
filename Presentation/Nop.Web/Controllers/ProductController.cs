@@ -331,6 +331,25 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        [NopHttpsRequirement(SslRequirement.No)]
+        public virtual ActionResult HomepageNewProducts()
+        {
+            if (!_catalogSettings.NewProductsEnabled)
+                return Content("");
+
+            var products = _productService.SearchProducts(
+                storeId: _storeContext.CurrentStore.Id,
+                visibleIndividuallyOnly: true,
+                markedAsNewOnly: true,
+                orderBy: ProductSortingEnum.CreatedOn,
+                pageSize: _catalogSettings.NewProductsNumber);
+
+            var model = new List<ProductOverviewModel>();
+            model.AddRange(_productModelFactory.PrepareProductOverviewModels(products));
+
+            return PartialView(model);
+        }
+
         public virtual ActionResult NewProductsRss()
         {
             var feed = new SyndicationFeed(

@@ -300,7 +300,7 @@ namespace Nop.Web.Factories
 
                     decimal rateBase = _taxService.GetShippingPrice(shippingTotal, _workContext.CurrentCustomer);
                     decimal rate = _currencyService.ConvertFromPrimaryStoreCurrency(rateBase, _workContext.WorkingCurrency);
-                    soModel.Fee = _priceFormatter.FormatShippingPrice(rate, true);
+                    soModel.Fee = rate >= 0 ? _priceFormatter.FormatShippingPrice(rate, true) : "рассчитывается индивидуально";
 
                     model.ShippingMethods.Add(soModel);
                 }

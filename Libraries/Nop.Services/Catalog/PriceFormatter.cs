@@ -78,20 +78,21 @@ namespace Nop.Services.Catalog
                 if (!String.IsNullOrEmpty(targetCurrency.DisplayLocale))
                 {
                     //default behavior
-                    result = amount.ToString("C", new CultureInfo(targetCurrency.DisplayLocale));
+                    //result = amount.ToString("C", new CultureInfo(targetCurrency.DisplayLocale));
+                    result = amount.ToString("N", new CultureInfo(targetCurrency.DisplayLocale));
                 }
                 else
                 {
                     //not possible because "DisplayLocale" should be always specified
                     //but anyway let's just handle this behavior
-                    result = String.Format("{0} ({1})", amount.ToString("N"), targetCurrency.CurrencyCode);
+                    result = String.Format("{0} {1}", amount.ToString("N"), targetCurrency.CurrencyCode);
                     return result;
                 }
             }
 
             //display currency code?
             if (showCurrency && _currencySettings.DisplayCurrencyLabel)
-                result = String.Format("{0} ({1})", result, targetCurrency.CurrencyCode);
+                result = String.Format("{0} {1}", result, targetCurrency.CurrencyCode);
             return result;
         }
 

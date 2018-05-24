@@ -1,0 +1,2 @@
+DataProvider: sqlserver
+DataConnectionString: Data Source=wpl18.hosting.reg.ru;Initial Catalog=u0334352_ecommerce;Integrated Security=False;Persist Security Info=False;User ID=u0334352_user;Password=pledDream01

@@ -11,8 +11,9 @@
 	}
 	@if (Model.NewsEnabled)
 	{
-		<li class="rss"><a href="@Url.RouteUrl("NewsRSS", new {languageId = Model.WorkingLanguageId})">@T("Footer.FollowUs.RSS")</a></li>
-	}
+		@*<li class="rss"><a href="@Url.RouteUrl("NewsRSS", new {languageId = Model.WorkingLanguageId})">@T("Footer.FollowUs.RSS")</a></li>*@
+        <li class="instagram"><a href="https://www.instagram.com/pled.dream/" style="background: url(/content/images/instagram.png) no-repeat;width:70px;height:70px;" target="_blank"></a></li>
+    }
 	@if (!string.IsNullOrEmpty(Model.YoutubeLink))
 	{
 		<li class="youtube"><a href="@Model.YoutubeLink" target="_blank">@T("Footer.FollowUs.Youtube")</a></li>

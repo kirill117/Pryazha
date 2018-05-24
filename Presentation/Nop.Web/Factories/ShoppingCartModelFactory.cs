@@ -1086,8 +1086,14 @@ namespace Nop.Web.Factories
                     if (shoppingCartShippingBase.HasValue)
                     {
                         decimal shoppingCartShipping = _currencyService.ConvertFromPrimaryStoreCurrency(shoppingCartShippingBase.Value, _workContext.WorkingCurrency);
-                        model.Shipping = _priceFormatter.FormatShippingPrice(shoppingCartShipping, true);
-
+                        if (shoppingCartShipping < 0)
+                        {
+                            model.Shipping = "Уточняйте у менеджера";
+                        }
+                        else
+                        {
+                            model.Shipping = _priceFormatter.FormatShippingPrice(shoppingCartShipping, true);
+                        }
                         //selected shipping method
                         var shippingOption = _workContext.CurrentCustomer.GetAttribute<ShippingOption>(SystemCustomerAttributeNames.SelectedShippingOption, _storeContext.CurrentStore.Id);
                         if (shippingOption != null)

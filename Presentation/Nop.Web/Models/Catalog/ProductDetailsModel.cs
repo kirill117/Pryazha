@@ -73,6 +73,7 @@ namespace Nop.Web.Models.Catalog
         public ManageInventoryMethod ManageInventoryMethod { get; set; }
 
         public string StockAvailability { get; set; }
+        public decimal StockQuantity { get; set; }
 
         public bool DisplayBackInStockSubscription { get; set; }
 

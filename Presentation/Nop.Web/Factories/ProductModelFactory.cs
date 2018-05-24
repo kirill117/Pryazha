@@ -1129,6 +1129,7 @@ namespace Nop.Web.Factories
                     SeName = product.GetSeName(),
                     Sku = product.Sku,
                     ProductType = product.ProductType,
+                    StockAvailability = product.GetTotalStockQuantity() > 0,
                     MarkAsNew = product.MarkAsNew &&
                         (!product.MarkAsNewStartDateTimeUtc.HasValue || product.MarkAsNewStartDateTimeUtc.Value < DateTime.UtcNow) &&
                         (!product.MarkAsNewEndDateTimeUtc.HasValue || product.MarkAsNewEndDateTimeUtc.Value > DateTime.UtcNow)
@@ -1194,6 +1195,7 @@ namespace Nop.Web.Factories
                 Gtin = product.Gtin,
                 ManageInventoryMethod = product.ManageInventoryMethod,
                 StockAvailability = product.FormatStockMessage("", _localizationService, _productAttributeParser, _dateRangeService),
+                StockQuantity = product.GetTotalStockQuantity(),
                 HasSampleDownload = product.IsDownload && product.HasSampleDownload,
                 DisplayDiscontinuedMessage = !product.Published && _catalogSettings.DisplayDiscontinuedMessageForUnpublishedProducts
             };

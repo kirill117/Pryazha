@@ -916,6 +916,7 @@ namespace Nop.Web.Controllers
                 processPaymentRequest.PaymentMethodSystemName = _workContext.CurrentCustomer.GetAttribute<string>(
                     SystemCustomerAttributeNames.SelectedPaymentMethod,
                     _genericAttributeService, _storeContext.CurrentStore.Id);
+
                 var placeOrderResult = _orderProcessingService.PlaceOrder(processPaymentRequest);
                 if (placeOrderResult.Success)
                 {
@@ -1669,9 +1670,7 @@ namespace Nop.Web.Controllers
 
                 processPaymentRequest.StoreId = _storeContext.CurrentStore.Id;
                 processPaymentRequest.CustomerId = _workContext.CurrentCustomer.Id;
-                processPaymentRequest.PaymentMethodSystemName = _workContext.CurrentCustomer.GetAttribute<string>(
-                    SystemCustomerAttributeNames.SelectedPaymentMethod,
-                    _genericAttributeService, _storeContext.CurrentStore.Id);
+                processPaymentRequest.PaymentMethodSystemName = "Payments.Manual"; // _workContext.CurrentCustomer.GetAttribute<string>(SystemCustomerAttributeNames.SelectedPaymentMethod, _genericAttributeService, _storeContext.CurrentStore.Id);
                 var placeOrderResult = _orderProcessingService.PlaceOrder(processPaymentRequest);
                 if (placeOrderResult.Success)
                 {

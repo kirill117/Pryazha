@@ -22,7 +22,8 @@
     int shippingMethodStepNumber = 3;
     int paymentMethodStepNumber = 4;
     int paymentInfoStepNumber = 5;
-    int confirmOrderStepNumber = 6;
+    int confirmOrderStepNumber = 4;
+
     if (!Model.ShippingRequired)
     {
         paymentMethodStepNumber = paymentMethodStepNumber - 2;
@@ -123,7 +124,7 @@
                     </div>
                 </li>
             }
-            <li id="opc-payment_method" class="tab-section">
+            <li id="opc-payment_method" class="tab-section" style="display:none;">
                 <div class="step-title">
                     <span class="number">@paymentMethodStepNumber</span>
                     <h2 class="title">@T("Checkout.PaymentMethod")</h2>
@@ -145,7 +146,7 @@
                     </div>
                 </div>
             </li>
-            <li id="opc-payment_info" class="tab-section">
+            <li id="opc-payment_info" class="tab-section" style="display:none;">
                 <div class="step-title">
                     <span class="number">@paymentInfoStepNumber</span>
                     <h2 class="title">@T("Checkout.PaymentInfo")</h2>

@@ -1,0 +1,8 @@
+﻿Group: Widgets
+FriendlyName: Nice Checkout
+SystemName: Widgets.NiceCheckout
+Version: 1.00
+SupportedVersions: 3.90
+Author: Tomasz Majewski
+DisplayOrder: 1
+FileName: Nop.Plugin.Widgets.NiceCheckout.dll

@@ -1,0 +1,83 @@
+﻿@model Nop.Plugin.Widgets.NiceCheckout.Models.CheckoutPaymentMethodModel2
+@using Nop.Web.Framework
+<div class="checkout-data">
+    @Html.Widget("op_checkout_payment_method_top")
+    <div class="section payment-method">
+        @if (Model.DisplayRewardPoints && Model.PaymentMethods.Count > 0)
+        {
+            <div class="use-reward-points">
+                @Html.CheckBoxFor(x => x.UseRewardPoints, Model.RewardPointsEnoughToPayForOrder ? new { @onclick = "PaymentMethod.toggleUseRewardPoints(this)" } : null)
+                @string.Format(T("Checkout.UseRewardPoints").Text, Model.RewardPointsBalance, Model.RewardPointsAmount)
+                @if (Model.RewardPointsEnoughToPayForOrder)
+                {
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            PaymentMethod.toggleUseRewardPoints($('#@Html.FieldIdFor(model => model.UseRewardPoints)'));
+                        });
+                    </script>
+                }
+            </div>
+        }
+        @if (Model.PaymentMethods.Count > 0)
+        {
+            <ul class="method-list" id="payment-method-block">
+                @for (int i = 0; i < Model.PaymentMethods.Count; i++)
+                {
+                    var paymentMethod = Model.PaymentMethods[i];
+                    var paymentMethodName = paymentMethod.Name;
+                    if (!String.IsNullOrEmpty(paymentMethod.Fee))
+                    {
+                        paymentMethodName = T("Checkout.SelectPaymentMethod.MethodAndFee", paymentMethodName, paymentMethod.Fee).Text;
+                    }
+                    <li>
+                        <div class="method-name">
+                            @if (!String.IsNullOrEmpty(paymentMethod.LogoUrl))
+                            {
+                                <div class="payment-logo">
+                                    <label for="paymentmethod_@(i)">
+                                        <img src="@paymentMethod.LogoUrl" alt="@paymentMethodName" />
+                                    </label>
+                                </div>
+                            }
+                            <div class="payment-details">
+                                <input id="paymentmethod_@(i)" type="radio" name="paymentmethod" value="@(paymentMethod.PaymentMethodSystemName)" checked="@paymentMethod.Selected" onclick="showPaymentInfo(@i)" />
+                                <label for="paymentmethod_@(i)">@paymentMethodName</label>
+                                @if (!string.IsNullOrEmpty(paymentMethod.Description))
+                                {
+                                    <div class="payment-description">@paymentMethod.Description</div>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="message-error">
+                @T("Checkout.NoPaymentMethods")
+            </div>
+        }
+
+        @if (Model.PaymentMethods.Count > 0)
+        {
+            for (int i = 0; i < Model.PaymentMethods.Count; i++)
+            {
+                <div class="payment-info payment-info-no-@i">
+                    @Html.Action(Model.PaymentMethods[i].PaymentInfo.PaymentInfoActionName, Model.PaymentMethods[i].PaymentInfo.PaymentInfoControllerName, Model.PaymentMethods[i].PaymentInfo.PaymentInfoRouteValues)
+                </div>
+            }
+
+        }
+        <script>
+            function showPaymentInfo(number)
+            {
+                $(".payment-info").hide();
+                $(".payment-info.payment-info-no-"+number).show();
+            }
+            showPaymentInfo(0)
+        </script>
+
+    </div>
+    @Html.Widget("op_checkout_payment_method_bottom")
+</div>

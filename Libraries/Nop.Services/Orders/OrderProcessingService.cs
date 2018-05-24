@@ -3150,6 +3150,8 @@ namespace Nop.Services.Orders
         /// <returns>true - OK; false - minimum order total amount is not reached</returns>
         public virtual bool IsPaymentWorkflowRequired(IList<ShoppingCartItem> cart, bool? useRewardPoints = null)
         {
+            return false;
+
             if (cart == null)
                 throw new ArgumentNullException("cart");
 

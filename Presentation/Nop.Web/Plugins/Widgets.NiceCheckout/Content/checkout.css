@@ -1,0 +1,17 @@
+﻿
+.checkout-page .button-1.grey {
+    background-color: #777 !important;
+}
+
+
+
+.checkout-page .confirm-order-note {
+
+    width: 50%;
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.payment-info {
+    display: none;
+}

@@ -525,19 +525,6 @@ namespace Nop.Services.Messages
 
             if (vendorId == 0)
             {
-                //we render checkout attributes and totals only for store owners (hide for vendors)
-            
-                #region Checkout Attributes
-
-                if (!String.IsNullOrEmpty(order.CheckoutAttributeDescription))
-                {
-                    sb.AppendLine("<tr><td style=\"text-align:right;\" colspan=\"1\">&nbsp;</td><td colspan=\"3\" style=\"text-align:right\">");
-                    sb.AppendLine(order.CheckoutAttributeDescription);
-                    sb.AppendLine("</td></tr>");
-                }
-
-                #endregion
-
                 #region Totals
 
                 //subtotal
@@ -722,6 +709,16 @@ namespace Nop.Services.Messages
                 sb.AppendLine(string.Format("<tr style=\"text-align:right;\"><td>&nbsp;</td><td colspan=\"2\" style=\"background-color: {0};padding:0.6em 0.4 em;\"><strong>{1}</strong></td> <td style=\"background-color: {0};padding:0.6em 0.4 em;\"><strong>{2}</strong></td></tr>", _templatesSettings.Color3, _localizationService.GetResource("Messages.Order.OrderTotal", languageId), cusTotal));
                 #endregion
 
+                #region Checkout Attributes
+
+                if (!String.IsNullOrEmpty(order.CheckoutAttributeDescription))
+                {
+                    sb.AppendLine("<tr><td style=\"text-align:right;\" colspan=\"1\">&nbsp;</td><td colspan=\"3\" style=\"text-align:right\">");
+                    sb.AppendLine(order.CheckoutAttributeDescription);
+                    sb.AppendLine("</td></tr>");
+                }
+
+                #endregion
             }
 
             sb.AppendLine("</table>");
