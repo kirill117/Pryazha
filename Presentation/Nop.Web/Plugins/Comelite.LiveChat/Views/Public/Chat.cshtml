@@ -1,0 +1,347 @@
+﻿@model Nop.Plugin.Comelite.LiveChat.Models.ChatModel
+@{
+    if (Model.IsRTL)
+    {
+        Html.AddCssFileParts("~/Plugins/Comelite.LiveChat/Content/css/styles.rtl.css");
+    }
+    else
+    {
+        Html.AddCssFileParts("~/Plugins/Comelite.LiveChat/Content/css/styles.css");
+    }
+
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+
+    //title
+    Html.AddTitleParts(T("Nop.Plugin.Comelite.LiveChat.Chat").Text);
+
+    var conversationMessage = Model.ConvesationMessages;
+
+}
+<style>
+
+@Html.DisplayTextFor(model => model.CustomStyles)
+
+</style>
+<div class="page contact-page">
+    <div class="page-title">
+        <h1>@Model.Title</h1>
+        <div id="userOnline">
+            @T("Nop.Plugin.Comelite.LiveChat.Conversation.Online"):
+            @if (Model.IsOnline)
+            {<text><img src="@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-true.gif")" /></text>}
+            else
+            {<text><img src="@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-false.gif")" /></text>}<br />
+        </div>
+    </div>
+    <div class="page-body">
+        @using(Html.BeginForm(null, null, FormMethod.Post, new { id = "chatForm" }))
+        {
+            @Html.ValidationSummary(false)
+            @Html.HiddenFor(model => model.StoreId)
+            @Html.HiddenFor(model => model.FromCustomerId)
+            @Html.HiddenFor(model => model.FromCustomerName)
+            @Html.HiddenFor(model => model.ToCustomerId)
+
+            <div class="form-fields">
+
+                <div id="display-chat-messages">
+
+                    @if (conversationMessage != null && conversationMessage.Count > 0)
+                    {
+                        DateTime? beforMessageDateCreated = null;
+                int? beforSenderId = null;
+                bool isNewBlock = true;
+                bool oldBlockOpen = false;
+
+                        foreach (var message in conversationMessage)
+                        {
+                            if (!beforMessageDateCreated.HasValue ||
+                                !beforSenderId.HasValue ||
+                                (message.OrdinaryDateCreated - beforMessageDateCreated.Value).TotalMinutes >= 1 ||
+                                message.SenderId != beforSenderId)
+                            {
+                                isNewBlock = true;
+                            }
+                            else
+                            {
+                                isNewBlock = false;
+                            }
+
+                            if (isNewBlock)
+                            {
+                                if (oldBlockOpen)
+                                {
+                                    @:</div>
+                                }
+
+                                <text><div class="message-block">
+                                        <p><span class="sender">@message.SenderName</span><span class="createdOn" data-time="@message.CreatedOn"></span></p></text>
+                                oldBlockOpen = true;
+
+                            }
+                            <text><p style="clear: both"><span data-time="@message.CreatedOn" data-senderId="@message.SenderId" class="message-text">@message.Text</span></p></text>
+
+                            beforMessageDateCreated = message.OrdinaryDateCreated;
+                            beforSenderId = message.SenderId;
+
+                        }
+
+                        @:</div>
+                    }
+                </div>
+                <div id="information">
+					<div id="display-chat-info"></div>
+					<div id="display-chat-error"><span id="chat-error-text"></span></div>
+				</div>
+                
+                <br />
+                <div class="inputs">
+                    @Html.LabelFor(model => model.Message, new { }, ":")
+                    @Html.TextBoxFor(model => model.Message, new { @class = "enter-comment-title" })
+                    @Html.ValidationMessageFor(model => model.Message)
+                </div>
+                <div class="buttons">
+                    @Html.Raw(Model.Button)
+                </div>
+            </div>
+        }
+    </div>
+    </div>
+
+    <script type="text/javascript">
+        /* Utility functions */
+        function ScrollToBottom() {
+            $("#display-chat-messages").scrollTop(document.getElementById("display-chat-messages").scrollHeight);
+        }
+        function displayError(error) {
+            $('#display-chat-error #chat-error-text').html(error);
+        }
+        function clearError() {
+            $('#display-chat-error #chat-error-text').html('');
+            clearTimeout(errorTimeout);
+        }
+
+        function countdown(time)
+        {
+            if (!time)
+                return;
+            if (typeof (time) === "string")
+                time = new Date(Date.parse(time));
+            if (typeof (time) === "number") {
+                var t = new Date();
+                t.setTime(time);
+                time = t;
+            }
+
+            var dif = new Date() - time; // in ms
+
+            var r = Math.floor(dif / 86400000);  // (1000 * 60 * 60 * 24)
+            if (r == 0) {
+                r = Math.floor(dif / 3600000); // (1000 * 60 * 60 * 1)
+                if (r == 0) {
+                    r = Math.floor(dif / 60000); // (1000 * 60 * 1 * 1)
+                    if (r == 0) {
+                        r = Math.floor(dif / 1000); // (1000 * 10 * 1 * 1)
+                        return "@T("Nop.Plugin.Comelite.LiveChat.MomentsAgo")";
+                    }
+                    return r + " @T("Nop.Plugin.Comelite.LiveChat.MinutesAgo")";
+                }
+
+                return r + " @T("Nop.Plugin.Comelite.LiveChat.HoursAgo")";
+            }
+
+			var months = [
+				"@T("Nop.Plugin.Comelite.LiveChat.Jan")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Feb")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Mar")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Apr")",
+				"@T("Nop.Plugin.Comelite.LiveChat.May")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Jun")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Jul")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Aug")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Sep")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Oct")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Nov")",
+				"@T("Nop.Plugin.Comelite.LiveChat.Dec")"
+			];
+            return time.getDate() + ' ' + months[time.getMonth()] + ' ' + time.getFullYear() + '-' + time.getHours() + ':' + time.getMinutes();
+        }
+
+        function formatTime() {
+            $("#display-chat-messages .createdOn").each(function () {
+                var time = $(this).data("time");
+                $(this).html(countdown(time));
+            })
+        }
+    </script>
+    <script type="text/javascript">
+        /* Chat functions */
+
+        var form = $('#chatForm');
+        var errorTimeout;
+        var myHub = null;
+        var lastUpdate = new Date().getTime();
+
+        function appendNewMessage(senderId, senderName, messageText, createdOn) {
+            var lastMessage = $('.message-text').last();
+            var createNewBlock = true;
+
+            if (lastMessage != null) {
+                var lastMessageTime = lastMessage.data("time");
+                var lastSenderId = lastMessage.data("senderid");
+
+                if (senderId == lastSenderId)
+                    createNewBlock = false;
+
+                if (!createNewBlock) {
+                    difference = (createdOn - lastMessageTime) / (1000 * 60); // Minutes
+
+                    if (difference >= 1)
+                        createNewBlock = true;
+                }
+            }
+
+            if (createNewBlock) {
+                $('#display-chat-messages').append('<div class="message-block"><P><span class="sender">'
+                            + senderName + ':</span><span class="createdOn" data-time="'
+                            + createdOn + '"></span></p><p style="clear: both"><span data-time="'
+                            + createdOn + '" data-senderId="'
+                            + senderId + '" class="message-text">'
+                            + messageText + '</span></p></div>');
+            } else {
+                var lastBlock = $('.message-block').last();
+                lastBlock.append('<p style="clear: both"><span data-time="'
+                            + createdOn + '" data-senderId="'
+                            + senderId + '" class="message-text">'
+                            + messageText + '</span></p>');
+            }
+        }
+
+        function cleanupAfterSending() {
+            $("#net-info").remove();
+            $("#@Html.FieldIdFor(model => model.Message)").val('').focus();
+            $('#send-message').attr('disabled', true);
+            formatTime();
+            $("#display-chat-messages").append('<span id="net-info">@T("Nop.Plugin.Comelite.LiveChat.Sent")</span>');
+            ScrollToBottom();
+        }
+
+        function updateChatPage() {
+            formatTime();
+            difference = (new Date().getTime() - lastUpdate) / (1000 * 3);
+            if (difference >= 1)
+                $('#display-chat-info').html('');
+        }
+
+        $(document).ready(function () {
+            myHub = $.connection.chatHub;
+
+            myHub.client.addChatMessage = function (message) {
+                if (message.MessageStatus == 3) {
+                    clearError();
+                    $('#display-chat-info').html(message.Text);
+                    lastUpdate = new Date().getTime();
+                } else {
+                    appendNewMessage(message.SenderId, message.SenderName, message.Text, parseFloat(message.CreatedOn));
+                    var snd = new Audio('@Url.Content("~/Plugins/Comelite.LiveChat/Content/sounds/newchat.mp3")');
+                    snd.play();
+                    ScrollToBottom();
+                }
+            };
+
+            myHub.client.messageSentSuccessfully = function () {
+                clearError();
+                cleanupAfterSending();
+            };
+
+            myHub.client.userGotOnline = function (userId, online) {
+                var toCustomerId = $("#@Html.FieldIdFor(model => model.ToCustomerId)").val();
+                if (userId != toCustomerId) return;
+
+                var src = online
+                    ? '@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-true.gif")'
+                    : '@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-false.gif")';
+                $("#userOnline img").attr('src', src);
+            };
+
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+                $("#@Html.FieldIdFor(model => model.Message)").keydown(function (e) {
+                    if (e.which == 13) {
+                        sendMessagetoServer();
+                    } else if($.inArray(e.keyCode,[13,16,17,18,19,20,27,35,36,37,38,39,40,91,93,224]) === -1) {
+                        var toCustomerId = $("#@Html.FieldIdFor(model => model.ToCustomerId)").val();
+
+                        myHub.server.sendNotice(toCustomerId);
+                    }
+                });
+
+                $("#send-message").click(function (e) {
+                    e.preventDefault();
+
+                    sendMessagetoServer();
+
+                    return false;
+                });
+            });
+
+            function sendMessagetoServer() {
+                var message = htmlEncode($("#@Html.FieldIdFor(model => model.Message)").val());
+
+                if (message == '') {
+                    $("#@Html.FieldIdFor(model => model.Message)").css({
+                        'background-color': '#F79D9D'
+                    });
+                    return false;
+                }
+
+                $("#@Html.FieldIdFor(model => model.Message)").val('');
+
+                var toCustomerId = $("#@Html.FieldIdFor(model => model.ToCustomerId)").val();
+                var senderId = $("#@Html.FieldIdFor(model => model.FromCustomerId)").val();
+                var senderName = $("#@Html.FieldIdFor(model => model.FromCustomerName)").val();
+                var date = new Date().getTime();
+
+                appendNewMessage(senderId, senderName, message, date);
+
+                $("#net-info").remove();
+                $("#display-chat-messages").append('<span id="net-info">@T("Nop.Plugin.Comelite.LiveChat.Sending")</span>');
+                ScrollToBottom();
+
+                myHub.server.sendChatMessage(message, toCustomerId);
+
+                errorTimeout = setTimeout(function () {
+                    // if there has been no response... surely the message was not sent
+                    displayError('@T("Nop.Plugin.Comelite.LiveChat.Error")');
+                    $("#display-chat-messages #net-info").html('@T("Nop.Plugin.Comelite.LiveChat.Error")');
+                }, 60000);
+            }
+
+            formatTime();
+            $('#send-message').attr('disabled', true);
+            ScrollToBottom();
+            var update = setInterval(updateChatPage, 1000);
+
+            $(window).bind('beforeunload', function () {
+                clearInterval(update);
+                $("#net-info").remove();
+                $("#display-chat-error").remove();
+            });
+
+            $("#@Html.FieldIdFor(model => model.Message)").keyup(function () {
+                var message = $("#@Html.FieldIdFor(model => model.Message)").val();
+                $("#@Html.FieldIdFor(model => model.Message)").removeAttr('style');
+
+                if (message.lenght == 0) {
+                    $('#send-message').attr('disabled', true);
+                }
+                else {
+                    $('#send-message').attr('disabled', false);
+                }
+            });
+        });
+
+    </script>
+
+    <script src="@Url.Content("~/Plugins/Comelite.LiveChat/Content/js/jquery.signalR-2.2.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/signalr/hubs")" type="text/javascript"></script>

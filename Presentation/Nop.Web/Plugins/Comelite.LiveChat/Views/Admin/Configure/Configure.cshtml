@@ -1,0 +1,162 @@
+﻿@model ConfigurationModel
+
+@using Nop.Plugin.Comelite.LiveChat.Models;
+@{
+    Layout = "";   
+    
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    if (Model.IsFreeVersion)
+    {
+    <text>
+    <div>
+        The trial verion displays the "Developed by Comelite" logo everywhere the plugin is used. 
+        To remove it, please <a href="https://comelite.net/product/nopcommerce-chat-multiagent-trial/">purchase</a> the plugin
+    </div>
+    </text>    
+    }
+    
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.LicenseKey)
+                    </div>
+
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.LicenseKey)
+                        @Html.ValidationMessageFor(model => model.LicenseKey)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#@Html.FieldIdFor(model => model.ConversationAllowCustomersToSelectPageSize)").click(toggleConversationPageSize);
+
+            toggleConversationPageSize();
+        });
+
+
+        function toggleConversationPageSize() {
+            if ($('#@Html.FieldIdFor(model => model.ConversationAllowCustomersToSelectPageSize)').is(':checked')) {
+                $('#pnlConversationPageSize').hide();
+                $('#pnlConversationPageSizeOptions').show();
+            } else {
+                $('#pnlConversationPageSize').show();
+                $('#pnlConversationPageSizeOptions').hide();
+            }
+        }
+
+    </script>
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.WidgetZone_MyChats_OverrideForStore, model => model.WidgetZone_MyChats, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.WidgetZone_MyChats)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.WidgetZone_MyChats, Model.AvailableWidgetZone_MyChats)
+                        @Html.ValidationMessageFor(model => model.WidgetZone_MyChats)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.WidgetZone_Conversation_OverrideForStore, model => model.WidgetZone_Conversation, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.WidgetZone_Conversation)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.WidgetZone_Conversation, Model.AvailableWidgetZone_Conversation)
+                        @Html.ValidationMessageFor(model => model.WidgetZone_Conversation)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.CustomStyles_OverrideForStore, model => model.CustomStyles, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.CustomStyles)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(model => model.CustomStyles, new { style = "Width: 450px; Height: 450px;" })
+                        @Html.ValidationMessageFor(model => model.CustomStyles)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.ConversationAllowCustomersToSelectPageSize_OverrideForStore, model => model.ConversationAllowCustomersToSelectPageSize, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.ConversationAllowCustomersToSelectPageSize)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ConversationAllowCustomersToSelectPageSize)
+                        @Html.ValidationMessageFor(model => model.ConversationAllowCustomersToSelectPageSize)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlConversationPageSize">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.ConversationPageSize_OverrideForStore, model => model.ConversationPageSize, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.ConversationPageSize)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ConversationPageSize)
+                        @Html.ValidationMessageFor(model => model.ConversationPageSize)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlConversationPageSizeOptions">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.ConversationPageSizeOptions_OverrideForStore, model => model.ConversationPageSizeOptions, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.ConversationPageSizeOptions)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ConversationPageSizeOptions)
+                        @Html.ValidationMessageFor(model => model.ConversationPageSizeOptions)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.SelectedCustomerRoleIds_OverrideForStore, "checkboxes", Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.AvailableCustomerRoles)
+                    </div>
+                    <div class="col-md-9" id="checkboxes">
+                        @if (Model.AvailableCustomerRoles != null && Model.AvailableCustomerRoles.Count > 0)
+                        {
+                            foreach (var userRole in Model.AvailableCustomerRoles)
+                            {
+                            <div>
+                                <input type="checkbox" name="SelectedCustomerRoleIds" value="@userRole.Id" checked="@(Model.SelectedCustomerRoleIds != null && Model.SelectedCustomerRoleIds.Contains(userRole.Id))" />@userRole.Name
+                            </div>
+                            }
+                        }
+                        else
+                        {
+                            <div>No customer roles defined</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-9">
+                        <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

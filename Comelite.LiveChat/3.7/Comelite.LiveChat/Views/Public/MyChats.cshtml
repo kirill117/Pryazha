@@ -1,0 +1,74 @@
+﻿@model Nop.Plugin.Comelite.LiveChat.Models.MyChatsModel
+@{
+    if (Model.IsRTL)
+    {
+        Html.AddCssFileParts("~/Plugins/Comelite.LiveChat/Content/css/styles.rtl.css");
+    }
+    else
+    {
+        Html.AddCssFileParts("~/Plugins/Comelite.LiveChat/Content/css/styles.css");
+    }
+
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+}
+
+<style>
+
+@Html.DisplayTextFor(model => model.CustomStyles)
+
+</style>
+
+@section left
+{
+    @Html.Partial("~/Plugins/Comelite.LiveChat/Views/Public/MyAccountNavigation.cshtml", Model.NavigationModel, new ViewDataDictionary())
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("Nop.Plugin.Comelite.LiveChat.Account.Chats")</h1>
+    </div>
+    <div class="page-body">
+        @if (Model.Users.Count > 0)
+        {
+            <div class="table-wrapper">
+                <table class="my-chats">
+                    <thead>
+                        <th data-hide="w410, w480, w580">
+                            @T("Nop.Plugin.Comelite.LiveChat.User")
+                        </th>
+                        <th data-hide="w410, w480, w580">
+                            @T("Nop.Plugin.Comelite.LiveChat.Message")
+                        </th>
+                        <th data-hide="w410, w480, w580">
+                            @T("Nop.Plugin.Comelite.LiveChat.Online")
+                        </th>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    <a href='@(Url.RouteUrl("Nop.Plugin.Comelite.LiveChat.LiveChat", new { toCustomerId = user.Id }))'>@user.Name</a>
+                                </td>
+                                <td>
+                                    <span @if(!user.Read){<text>class = "unread-message"</text>}>@if (user.FromMe){@T("Nop.Plugin.Comelite.LiveChat.Me")<text>: </text>}@user.Message</span>
+                                </td>
+                                <td>
+                                    @if(user.IsOnline){<text><img src="@Url.Content("~/Administration/Content/images/active-true.gif")" /></text>}else{<text><img src="@Url.Content("~/Administration/Content/images/active-false.gif")" /></text>}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+    @if (Model.IsFreeVersion)
+    {
+        <text>
+        <div id="trial-version-link">Trial version. Developed by <a href="https://www.comelite.net/product/nop-livechat">Comelite IT Solutions LLC</a></div>            
+        </text>    
+    }
+
+</div>

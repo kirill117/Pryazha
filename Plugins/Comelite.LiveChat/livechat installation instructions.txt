@@ -1,0 +1,18 @@
+3.6
+---------------------------
+Copy the dll files in the "3.6-dlls" folder to your root bin folder
+
+
+3.7 and 3.8
+---------------------------
+remember to remove or comment the following line in your root web.config file:
+
+<add key="owin:AutomaticAppStartup" value="false" />
+
+3.8 early release
+---------------------------
+this plugin is set to work with the early release of nopCommerce 3.8 - nopCommerce was updated after this release, so it should only be used for those who are using an initial release of nopCommerce 3.8
+
+remember to remove or comment the following line in your root web.config file:
+
+<add key="owin:AutomaticAppStartup" value="false" />

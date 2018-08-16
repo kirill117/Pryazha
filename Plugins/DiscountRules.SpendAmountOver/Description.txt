@@ -1,0 +1,9 @@
+﻿Group: Discount requirements
+FriendlyName: DISCOUNT ON CURRENT SHOPPING CART SUBTOTAL
+SystemName: DiscountRequirement.SpendAmountOver
+Version: 1.01
+SupportedVersions: 3.80
+Author: Forefront Infotech/nopCommerceplus
+DisplayOrder: 1
+FileName: Nop.Plugin.DiscountRules.SpendAmountOver.dll
+Description: This plugin allows you to configure discounts for customers who spent more than the certain amount

@@ -1207,8 +1207,8 @@ namespace Nop.Services.Orders
 
             //shipping without tax
             decimal? shoppingCartShipping = GetShoppingCartShippingTotal(cart, false);
-
-
+            if (shoppingCartShipping < 0)
+                shoppingCartShipping = 0m;
 
             //payment method additional fee without tax
             decimal paymentMethodAdditionalFeeWithoutTax = decimal.Zero;

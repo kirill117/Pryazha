@@ -1,0 +1,13 @@
+﻿@{
+    
+    var myClassList = Session["MyChats"] != null ? "active" : "inactive";
+
+    Session["MyChats"] = null;
+}
+
+<li>
+    <a href="@Url.RouteUrl("Nop.Plugin.Comelite.LiveChat.MyChats")" class="@(myClassList)">
+        @T("Nop.Plugin.Comelite.LiveChat.MyChats")
+    </a>
+</li>
+

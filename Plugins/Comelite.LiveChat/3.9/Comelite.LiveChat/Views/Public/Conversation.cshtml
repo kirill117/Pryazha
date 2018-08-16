@@ -1,0 +1,146 @@
+﻿@using Nop.Plugin.Comelite.LiveChat.Models
+@using Nop.Web.Framework;
+@using Nop.Web.Framework.Mvc;
+@using Nop.Web.Framework.UI.Paging;
+@using Nop.Web.Extensions;
+
+
+@model ConversationModel
+@{
+    if(Model.IsRTL)
+    {
+        Html.AddCssFileParts("~/Plugins/Comelite.LiveChat/Content/css/styles.rtl.css");
+    }
+    else
+    {
+        Html.AddCssFileParts("~/Plugins/Comelite.LiveChat/Content/css/styles.css");
+    }
+
+    
+
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+    //title
+    Html.AddTitleParts(T("Nop.Plugin.Comelite.LiveChat.Conversation").Text);
+}
+<style>
+
+@Html.DisplayTextFor(model => model.CustomStyles)
+
+</style>
+@using (Html.BeginForm())
+{
+    <div class="page category-page">
+        <div class="page-title">
+            <h1>@T("Nop.Plugin.Comelite.LiveChat.Users")</h1>
+        </div>
+        <div class="page-body account-page">
+            @if (Model.NoResults)
+            {
+                <div class="no-data">
+                    @T("Nop.Plugin.Comelite.LiveChat.Conversation.NoUsers")
+                </div>
+            }
+            @if (Model.Users.Count > 0)
+            {
+                <div class="chat-selectors">
+                    @*view mode*@
+                    @if (Model.PagingFilteringContext.AllowDocumentViewModeChanging)
+                    {
+                        <div class="chat-viewmode">
+                            <span>@T("Nop.Plugin.Comelite.LiveChat.Conversation.ViewMode")</span>
+                            @if (Model.PagingFilteringContext.AvailableViewModes.Count > 1)
+                            {
+                                @Html.DropDownList("chat-viewmode", Model.PagingFilteringContext.AvailableViewModes, new { onchange = "setLocation(this.value);" })
+                            }
+                        </div>
+                    }
+        
+                    @*page size*@
+                    @if (Model.PagingFilteringContext.AllowCustomersToSelectPageSize)
+                    {
+                        <div class="chat-page-size">
+                            <span>@T("Nop.Plugin.Comelite.LiveChat.Conversation.PageSize")</span>
+                            @Html.DropDownList("chat-pagesize", Model.PagingFilteringContext.PageSizeOptions, new { onchange = "setLocation(this.value);" })
+                            <span>@T("Nop.Plugin.Comelite.LiveChat.Conversation.PageSize.PerPage")</span>
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.Users.Count > 0)
+            {
+                <div class="@(Model.PagingFilteringContext.ViewMode == "list" ? "chat-list" : "chat-grid")">
+                    <div class="item-grid">
+                        @for (int i = 0; i < Model.Users.Count; i++)
+                        {
+                            var user = Model.Users[i];                    
+                            <div class="chat-box">
+                                <div class="chat-item" id=user-@user.Id>
+                                    <strong>@Html.LabelFor(model => model.Users[i].FirstName, new { }, ":")</strong>
+                                    @user.FirstName
+                                    <br />
+
+                                    <strong>@Html.LabelFor(model => model.Users[i].LastName, new { }, ":")</strong>
+                                    @user.LastName
+                                    <br />
+
+                                    <strong>@Html.LabelFor(model => model.Users[i].Email, new { }, ":")</strong>
+                                    @user.Email
+                                    <br />
+                                    <strong>@Html.LabelFor(model => model.Users[i].IsOnline, new { }, ":")</strong>&nbsp;
+                                    @if (user.IsOnline)
+                                    {<text><img src="@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-true.gif")" /></text>}
+                                    else
+                                    {<text><img src="@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-false.gif")" /></text>}<br />
+
+                                    <div class="chat-buttons-box">
+                                        <input type="button" class="chat-button" onclick="location.href='@(Url.RouteUrl("Nop.Plugin.Comelite.LiveChat.LiveChat", new { toCustomerId = user.Id }))    '"  value= '@T("Nop.Plugin.Comelite.LiveChat.Chat")'/>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pager">
+                    @pager
+                </div>
+            }
+            @if (Model.IsFreeVersion)
+            {
+                <text>
+                <div id="trial-version-link">Trial version. Developed by <a href="https://www.comelite.net/product/nop-livechat">Comelite IT Solutions LLC</a></div>            
+                </text>    
+            }
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        /* Chat functions */
+
+        var myHub = null;
+
+        $(document).ready(function () {
+            myHub = $.connection.chatHub;
+
+            myHub.client.userGotOnline = function (userId, online) {
+                var src = online
+                    ? '@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-true.gif")'
+                    : '@Url.Content("~/Plugins/Comelite.LiveChat/Content/images/active-false.gif")';
+                $("#user-"+userId+" img").attr('src', src);
+            };
+
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+            });
+        });
+
+</script>
+
+<script src="@Url.Content("~/Plugins/Comelite.LiveChat/Content/js/jquery.signalR-2.2.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/signalr/hubs")" type="text/javascript"></script>
